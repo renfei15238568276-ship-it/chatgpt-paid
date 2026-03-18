@@ -41,7 +41,7 @@
       <p style="font-size:13px;color:#666;margin-bottom:15px;">✅ 每次对话消耗次数<br>✅ 付费后联系客服开通</p>
       
       <div class="pay-section">
-        <h3>💰 <span class="price">¥9.9</span>/50次</h3>
+        <h3>💰 <span class="price">¥19.9</span>/100次</h3>
         <img src="https://raw.githubusercontent.com/renfei15238568276-ship-it/pdf2img-images/main/wechat.jpg" alt="微信支付">
         <p style="font-size:12px;color:#666;margin-top:10px;">付款后截图发给微信: r18974670134</p>
       </div>
@@ -78,7 +78,7 @@
       const code = document.getElementById('vipCode').value.trim().toLowerCase();
       if (code === 'gptvip') {
         isVip = true;
-        count = 50;
+        count = 100;
         localStorage.setItem('isVip', 'true');
         localStorage.setItem('chatCount', count);
         
@@ -88,7 +88,7 @@
         document.getElementById('inputArea').classList.add('show');
         document.getElementById('remainCount').textContent = count;
         
-        addMessage('🎉 VIP开通成功！您有50次对话次数', 'ai');
+        addMessage('🎉 VIP开通成功！您有100次对话次数', 'ai');
       } else {
         alert('兑换码无效，请联系客服购买');
       }
