@@ -13,10 +13,15 @@
     .vip-badge.show { display: block; }
     .login-section { background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 15px; }
     .login-section h3 { margin-bottom: 15px; color: #333; }
-    .login-section input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; margin-bottom: 10px; }
-    .login-section button { width: 100%; padding: 12px; background: #10a37f; color: white; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: bold; }
+    .login-section button { width: 100%; padding: 12px; background: #10a37f; color: white; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+    .product { background: #fff; border: 2px solid #10a37f; border-radius: 12px; padding: 15px; margin-bottom: 12px; cursor: pointer; }
+    .product:hover { background: #f0fdf4; }
+    .product.selected { background: #d1fae5; border-color: #059669; }
+    .product-header { display: flex; justify-content: space-between; align-items: center; }
+    .product-name { font-size: 16px; font-weight: bold; color: #333; }
+    .product-price { font-size: 20px; font-weight: bold; color: #e74c3c; }
+    .product-desc { font-size: 13px; color: #666; margin-top: 8px; }
     .pay-section { background: #fff3cd; padding: 15px; border-radius: 10px; margin: 15px 0; text-align: center; }
-    .pay-section h3 { color: #856404; margin-bottom: 10px; }
     .pay-section img { width: 140px; height: 140px; border-radius: 8px; }
     .chat-box { height: 350px; border: 1px solid #ddd; border-radius: 10px; overflow-y: auto; padding: 15px; margin-bottom: 15px; background: #f9f9f9; display: none; }
     .message { margin-bottom: 15px; padding: 12px; border-radius: 10px; max-width: 80%; }
@@ -27,23 +32,54 @@
     .input-area input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
     .input-area button { padding: 12px 20px; background: #10a37f; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
     .code-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; margin-bottom: 10px; text-align: center; }
-    .price { font-size: 24px; color: #e74c3c; font-weight: bold; }
+    .wechat { font-size: 14px; color: #07c160; font-weight: bold; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>🤖 ChatGPT VIP 对话</h1>
     
-    <div class="vip-badge" id="vipBadge">👑 VIP会员 - 剩余 <span id="remainCount">50</span> 次</div>
+    <div class="vip-badge" id="vipBadge">👑 VIP会员 - 剩余 <span id="remainCount">0</span> 次</div>
     
     <div class="login-section" id="loginSection">
-      <h3>👑 开通会员</h3>
-      <p style="font-size:13px;color:#666;margin-bottom:15px;">✅ 每次对话消耗次数<br>✅ 付费后联系客服开通</p>
+      <h3>👑 选择套餐</h3>
       
-      <div class="pay-section">
-        <h3>💰 <span class="price">¥19.9</span>/100次</h3>
+      <div class="product" onclick="selectProduct(50, '9.9')">
+        <div class="product-header">
+          <span class="product-name">🌱 入门版</span>
+          <span class="product-price">¥9.9</span>
+        </div>
+        <div class="product-desc">50次对话</div>
+      </div>
+      
+      <div class="product" onclick="selectProduct(200, '29.9')">
+        <div class="product-header">
+          <span class="product-name">⭐ 进阶版</span>
+          <span class="product-price">¥29.9</span>
+        </div>
+        <div class="product-desc">200次对话</div>
+      </div>
+      
+      <div class="product" onclick="selectProduct(1000, '99')">
+        <div class="product-header">
+          <span class="product-name">🔥 豪华版</span>
+          <span class="product-price">¥99</span>
+        </div>
+        <div class="product-desc">1000次对话</div>
+      </div>
+      
+      <div class="product" onclick="selectProduct(10000, '500')">
+        <div class="product-header">
+          <span class="product-name">👑 终身版</span>
+          <span class="product-price">¥500</span>
+        </div>
+        <div class="product-desc">10000次对话 / 永久</div>
+      </div>
+      
+      <div class="pay-section" id="paySection" style="display:none;">
+        <h3 id="payTitle">¥9.9 - 50次</h3>
         <img src="https://raw.githubusercontent.com/renfei15238568276-ship-it/pdf2img-images/main/wechat.jpg" alt="微信支付">
-        <p style="font-size:12px;color:#666;margin-top:10px;">付款后截图发给微信: r18974670134</p>
+        <p style="font-size:12px;color:#666;margin-top:10px;">付款后截图发给微信: <span class="wechat">r18974670134</span></p>
       </div>
       
       <p style="font-size:13px;color:#666;margin:15px 0;">或输入兑换码开通：</p>
@@ -62,6 +98,9 @@
   <script>
     const API_KEY = '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';
     
+    let selectedCount = 0;
+    let selectedPrice = '';
+    
     let isVip = localStorage.getItem('isVip') === 'true';
     let count = parseInt(localStorage.getItem('chatCount') || '0');
     
@@ -71,14 +110,23 @@
       document.getElementById('chatBox').style.display = 'block';
       document.getElementById('inputArea').classList.add('show');
       document.getElementById('remainCount').textContent = count;
-      addMessage('你好！我是AI助手，有什么可以帮你的？', 'ai');
+      addMessage('你好！我是ChatGPT AI助手，有什么可以帮你的？', 'ai');
+    }
+    
+    function selectProduct(count, price) {
+      selectedCount = count;
+      selectedPrice = price;
+      document.querySelectorAll('.product').forEach(p => p.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
+      document.getElementById('paySection').style.display = 'block';
+      document.getElementById('payTitle').textContent = '¥' + price + ' - ' + count + '次';
     }
     
     function redeemCode() {
       const code = document.getElementById('vipCode').value.trim().toLowerCase();
       if (code === 'gptvip') {
         isVip = true;
-        count = 100;
+        count = selectedCount || 100;
         localStorage.setItem('isVip', 'true');
         localStorage.setItem('chatCount', count);
         
@@ -88,7 +136,7 @@
         document.getElementById('inputArea').classList.add('show');
         document.getElementById('remainCount').textContent = count;
         
-        addMessage('🎉 VIP开通成功！您有100次对话次数', 'ai');
+        addMessage('🎉 VIP开通成功！您有' + count + '次对话次数', 'ai');
       } else {
         alert('兑换码无效，请联系客服购买');
       }
